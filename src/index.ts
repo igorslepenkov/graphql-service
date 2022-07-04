@@ -9,14 +9,16 @@ import { artistsTypeDefs } from "./modules/artists/typeDefs";
 import { genresTypeDefs } from "./modules/genres/typeDefs";
 import { bandsTypeDefs } from "./modules/bands/typeDefs";
 import { usersTypeDefs } from "./modules/users/typeDefs";
+import { jwtTypeDefs } from "./modules/jwt/typeDefs";
 
 import { artistsResolvers } from "./modules/artists/resolvers";
 import { usersResolvers } from "./modules/users/resolvers";
+import { jwtResolvers } from "./modules/jwt/resolvers";
+import { bandsResolvers } from "./modules/bands/resolvers";
 
 import { ArtistsAPI } from "./modules/artists/service";
 import { UsersAPI } from "./modules/users/service";
-import { jwtTypeDefs } from "./modules/jwt/typeDefs";
-import { jwtResolvers } from "./modules/jwt/resolvers";
+import { BandsAPI } from "./modules/bands/service";
 
 const types = [
   artistsTypeDefs,
@@ -26,7 +28,12 @@ const types = [
   jwtTypeDefs,
 ];
 const typeDefs = mergeTypeDefs(types);
-const rawResolvers = [artistsResolvers, usersResolvers, jwtResolvers];
+const rawResolvers = [
+  artistsResolvers,
+  usersResolvers,
+  jwtResolvers,
+  bandsResolvers,
+];
 const resolvers = mergeResolvers(rawResolvers);
 
 const server = new ApolloServer({
@@ -38,6 +45,7 @@ const server = new ApolloServer({
     return {
       artistsAPI: new ArtistsAPI(),
       usersAPI: new UsersAPI(),
+      bandsAPI: new BandsAPI(),
     };
   },
   context: ({ req }) => {

@@ -8,6 +8,14 @@ const genresTypeDefs = gql`
     country: String
     year: Int
   }
+
+  input GenreInput {
+    name: String!
+    description: String
+    country: String
+    year: Int
+  }
+
   type Query {
     genres: [Genre]
   }

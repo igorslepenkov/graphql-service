@@ -41,9 +41,9 @@ const artistsTypeDefs = gql`
   }
 
   type Mutation {
-    createArtist(input: AtristInput): Artist
-    deleteArtist(id: ID): Boolean
-    updateArtist(id: ID, body: ArtistUpdateInput): Artist
+    createArtist(input: AtristInput!): Artist
+    deleteArtist(id: ID!): Boolean
+    updateArtist(id: ID!, body: ArtistUpdateInput!): Artist
   }
 `;
 
