@@ -16,8 +16,22 @@ const genresTypeDefs = gql`
     year: Int
   }
 
+  input GenreUpdateInput {
+    name: String
+    description: String
+    country: String
+    year: Int
+  }
+
   type Query {
     genres: [Genre]
+    genre(id: ID!): Genre
+  }
+
+  type Mutation {
+    createGenre(input: GenreInput!): Genre
+    deleteGenre(id: ID!): Boolean
+    updateGenre(id: ID!, body: GenreUpdateInput!): Genre
   }
 `;
 

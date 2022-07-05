@@ -15,10 +15,12 @@ import { artistsResolvers } from "./modules/artists/resolvers";
 import { usersResolvers } from "./modules/users/resolvers";
 import { jwtResolvers } from "./modules/jwt/resolvers";
 import { bandsResolvers } from "./modules/bands/resolvers";
+import { genresResolvers } from "./modules/genres/resolvers";
 
 import { ArtistsAPI } from "./modules/artists/service";
 import { UsersAPI } from "./modules/users/service";
 import { BandsAPI } from "./modules/bands/service";
+import { GenresAPI } from "./modules/genres/service";
 
 const types = [
   artistsTypeDefs,
@@ -33,6 +35,7 @@ const rawResolvers = [
   usersResolvers,
   jwtResolvers,
   bandsResolvers,
+  genresResolvers,
 ];
 const resolvers = mergeResolvers(rawResolvers);
 
@@ -46,6 +49,7 @@ const server = new ApolloServer({
       artistsAPI: new ArtistsAPI(),
       usersAPI: new UsersAPI(),
       bandsAPI: new BandsAPI(),
+      genresAPI: new GenresAPI(),
     };
   },
   context: ({ req }) => {

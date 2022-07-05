@@ -11,8 +11,8 @@ const bandsResolvers = {
       { dataSources: { bandsAPI } }: { dataSources: { bandsAPI: BandsAPI } }
     ) => {
       const response = await bandsAPI.getBands();
-      const artistsArray = response.map(bandsToOutput);
-      return artistsArray;
+      const bandsArray = response.map(bandsToOutput);
+      return bandsArray;
     },
 
     band: async (
