@@ -2,13 +2,13 @@ import { gql } from "apollo-server";
 
 const bandsTypeDefs = gql`
   type Member {
-    artist: String
+    artist: Artist
     instrument: String
     years: String
   }
 
   input MemberInput {
-    artist: String
+    artist: ID!
     instrument: String
     years: String
   }
@@ -25,7 +25,7 @@ const bandsTypeDefs = gql`
   input BandInput {
     name: String!
     origin: String
-    membersIds: [MemberInput]
+    members: [MemberInput]
     website: String
     genresIds: [String]
   }
@@ -33,9 +33,9 @@ const bandsTypeDefs = gql`
   input BandUpdateInput {
     name: String
     origin: String
-    membersIds: [MemberInput]
+    members: [MemberInput]
     website: String
-    genres: [String]
+    genresIds: [String]
   }
 
   type Query {

@@ -8,7 +8,9 @@ class GenresAPI extends RESTDataSource {
   }
 
   willSendRequest(request: RequestOptions) {
-    request.headers.set("Authorization", `Bearer ${this.context.authToken}`);
+    if (this.context) {
+      request.headers.set("Authorization", `Bearer ${this.context.authToken}`);
+    }
   }
 
   async getGenres() {

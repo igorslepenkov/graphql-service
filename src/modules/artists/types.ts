@@ -1,3 +1,5 @@
+import { BandOutput } from "../bands/types";
+
 interface Artist {
   _id: string;
   firstName: string;
@@ -12,13 +14,24 @@ interface Artist {
 
 interface ArtistOutput {
   id: string;
+  firstName?: string;
+  secondName?: string;
+  middleName?: string;
+  birthDate?: string;
+  birthPlace?: string;
+  country: string;
+  bands?: BandOutput[];
+  instruments?: string[];
+}
+
+interface ArtistMembersOutput {
+  id: string;
   firstName: string;
   secondName: string;
   middleName?: string;
   birthDate?: string;
   birthPlace?: string;
   country: string;
-  bandsIds?: string[];
   instruments?: string[];
 }
 
@@ -44,4 +57,10 @@ interface ArtistUpdateInput {
   instruments?: string[];
 }
 
-export { Artist, ArtistInput, ArtistOutput, ArtistUpdateInput };
+export {
+  Artist,
+  ArtistInput,
+  ArtistOutput,
+  ArtistUpdateInput,
+  ArtistMembersOutput,
+};

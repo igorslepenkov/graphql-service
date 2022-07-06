@@ -1,6 +1,16 @@
+import { bandsToOutput } from "../bands/bandsObjectMutation";
+import { BandsAPI } from "../bands/service";
+import { Band } from "../bands/types";
+import { GenresAPI } from "../genres/service";
+import { ArtistsAPI } from "./service";
 import { Artist, ArtistOutput } from "./types";
 
-function artistToOutput(artistObject: Artist) {
+async function artistToOutput(
+  artistObject: Artist,
+  bandsAPI: BandsAPI,
+  genresAPI: GenresAPI,
+  artistsAPI: ArtistsAPI
+) {
   const {
     _id,
     firstName,
@@ -20,11 +30,27 @@ function artistToOutput(artistObject: Artist) {
     country,
   };
 
+  middleName ? (newObject.middleName = middleName) : false;
   birthDate ? (newObject.birthDate = birthDate) : false;
   birthPlace ? (newObject.birthPlace = birthPlace) : false;
-  bandsIds ? (newObject.bandsIds = bandsIds) : false;
   instruments ? (newObject.instruments = instruments) : false;
 
+  if (bandsIds) {
+    const bandsPromise = Promise.all(
+      bandsIds.map(async (bandId) => {
+        return await bandsAPI.getBandById(bandId);
+      })
+    );
+    const bands: Band[] = await bandsPromise;
+
+    const bandsOutput = Promise.all(
+      bands.map(async (band) => {
+        return await bandsToOutput(band, genresAPI, artistsAPI, bandsAPI);
+      })
+    );
+
+    newObject.bands = await bandsOutput;
+  }
   return newObject;
 }
 

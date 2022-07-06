@@ -1,7 +1,14 @@
-import { Artist } from "../artists/types";
+import { ArtistMembersOutput } from "../artists/types";
+import { GenreOutput } from "../genres/types";
 
 interface Member {
-  artist: Artist;
+  artist: string;
+  instrument: string;
+  years: string;
+}
+
+interface MemberOutput {
+  artist: ArtistMembersOutput;
   instrument: string;
   years: string;
 }
@@ -19,15 +26,15 @@ interface BandOutput {
   id: string;
   name?: string;
   origin?: string;
-  members?: Member[];
+  members?: MemberOutput[];
   website?: string;
-  genresIds?: string[];
+  genres?: GenreOutput[];
 }
 
 interface BandInput {
   name: string;
   origin?: string;
-  membersId?: Member[];
+  membersId?: string[];
   website?: string;
   genresIds?: string[];
 }
@@ -36,9 +43,9 @@ interface BandUpdateInput {
   id?: string;
   name?: string;
   origin?: string;
-  membersId?: Member[];
+  membersId?: string[];
   website?: string;
   genresIds?: string[];
 }
 
-export { Member, Band, BandOutput, BandInput, BandUpdateInput };
+export { Member, MemberOutput, Band, BandOutput, BandInput, BandUpdateInput };

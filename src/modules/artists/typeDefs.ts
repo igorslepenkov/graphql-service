@@ -10,7 +10,7 @@ const artistsTypeDefs = gql`
     birthPlace: String
     country: String
     bands: [Band]
-    instruments: String
+    instruments: [String]
   }
 
   input AtristInput {
@@ -20,7 +20,7 @@ const artistsTypeDefs = gql`
     birthDate: String
     birthPlace: String
     country: String!
-    bands: [String]
+    bands: [ID]
     instruments: [String]
   }
 
@@ -31,7 +31,7 @@ const artistsTypeDefs = gql`
     birthDate: String
     birthPlace: String
     country: String
-    bands: [String]
+    bandsIds: [ID]
     instruments: [String]
   }
 
