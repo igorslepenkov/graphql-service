@@ -10,17 +10,23 @@ import { genresTypeDefs } from "./modules/genres/typeDefs";
 import { bandsTypeDefs } from "./modules/bands/typeDefs";
 import { usersTypeDefs } from "./modules/users/typeDefs";
 import { jwtTypeDefs } from "./modules/jwt/typeDefs";
+import { tracksTypeDefs } from "./modules/tracks/typeDefs";
+import { albumsTypeDefs } from "./modules/albums/typeDefs";
 
 import { artistsResolvers } from "./modules/artists/resolvers";
 import { usersResolvers } from "./modules/users/resolvers";
 import { jwtResolvers } from "./modules/jwt/resolvers";
 import { bandsResolvers } from "./modules/bands/resolvers";
 import { genresResolvers } from "./modules/genres/resolvers";
+import { tracksResolvers } from "./modules/tracks/resolvers";
+import { albumsResolvers } from "./modules/albums/resolvers";
 
 import { ArtistsAPI } from "./modules/artists/service";
 import { UsersAPI } from "./modules/users/service";
 import { BandsAPI } from "./modules/bands/service";
 import { GenresAPI } from "./modules/genres/service";
+import { TracksAPI } from "./modules/tracks/service";
+import { AlbumsAPI } from "./modules/albums/service";
 
 const types = [
   artistsTypeDefs,
@@ -28,6 +34,8 @@ const types = [
   bandsTypeDefs,
   usersTypeDefs,
   jwtTypeDefs,
+  tracksTypeDefs,
+  albumsTypeDefs,
 ];
 const typeDefs = mergeTypeDefs(types);
 const rawResolvers = [
@@ -36,6 +44,8 @@ const rawResolvers = [
   jwtResolvers,
   bandsResolvers,
   genresResolvers,
+  tracksResolvers,
+  albumsResolvers,
 ];
 const resolvers = mergeResolvers(rawResolvers);
 
@@ -50,6 +60,8 @@ const server = new ApolloServer({
       usersAPI: new UsersAPI(),
       bandsAPI: new BandsAPI(),
       genresAPI: new GenresAPI(),
+      tracksAPI: new TracksAPI(),
+      albumsAPI: new AlbumsAPI(),
     };
   },
   context: ({ req }) => {
