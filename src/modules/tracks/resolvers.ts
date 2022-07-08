@@ -5,6 +5,7 @@ import { GenresAPI } from "../genres/service";
 import { TracksAPI } from "./service";
 import { Track, TrackInput, TrackOutput, TrackUpdateInput } from "./types";
 import { trackToOutput } from "./tracksObjectMutation";
+import { AlbumsAPI } from "../albums/service";
 
 const tracksResolvers = {
   Query: {
@@ -12,20 +13,28 @@ const tracksResolvers = {
       _: undefined,
       __: undefined,
       {
-        dataSources: { artistsAPI, bandsAPI, genresAPI, tracksAPI },
+        dataSources: { artistsAPI, bandsAPI, genresAPI, tracksAPI, albumsAPI },
       }: {
         dataSources: {
           artistsAPI: ArtistsAPI;
           bandsAPI: BandsAPI;
           genresAPI: GenresAPI;
           tracksAPI: TracksAPI;
+          albumsAPI: AlbumsAPI;
         };
       }
     ) => {
       const response = await tracksAPI.getTracks();
       const tracksArray = await Promise.all(
         response.map(async (track: Track) => {
-          return await trackToOutput(track, artistsAPI, bandsAPI, genresAPI);
+          return await trackToOutput(
+            track,
+            artistsAPI,
+            bandsAPI,
+            genresAPI,
+            albumsAPI,
+            tracksAPI
+          );
         })
       );
       return tracksArray;
@@ -35,13 +44,14 @@ const tracksResolvers = {
       _: undefined,
       { id }: { id: string },
       {
-        dataSources: { artistsAPI, bandsAPI, genresAPI, tracksAPI },
+        dataSources: { artistsAPI, bandsAPI, genresAPI, tracksAPI, albumsAPI },
       }: {
         dataSources: {
           artistsAPI: ArtistsAPI;
           bandsAPI: BandsAPI;
           genresAPI: GenresAPI;
           tracksAPI: TracksAPI;
+          albumsAPI: AlbumsAPI;
         };
       }
     ) => {
@@ -49,7 +59,14 @@ const tracksResolvers = {
       if (!response) {
         throw new ApolloErrorNotFound("This track was not found");
       }
-      return await trackToOutput(response, artistsAPI, bandsAPI, genresAPI);
+      return await trackToOutput(
+        response,
+        artistsAPI,
+        bandsAPI,
+        genresAPI,
+        albumsAPI,
+        tracksAPI
+      );
     },
   },
   Mutation: {
@@ -57,30 +74,39 @@ const tracksResolvers = {
       _: any,
       { input }: { input: TrackInput },
       {
-        dataSources: { artistsAPI, bandsAPI, genresAPI, tracksAPI },
+        dataSources: { artistsAPI, bandsAPI, genresAPI, tracksAPI, albumsAPI },
       }: {
         dataSources: {
           artistsAPI: ArtistsAPI;
           bandsAPI: BandsAPI;
           genresAPI: GenresAPI;
           tracksAPI: TracksAPI;
+          albumsAPI: AlbumsAPI;
         };
       }
     ) => {
       const response: Track = await tracksAPI.createTrack(input);
-      return await trackToOutput(response, artistsAPI, bandsAPI, genresAPI);
+      return await trackToOutput(
+        response,
+        artistsAPI,
+        bandsAPI,
+        genresAPI,
+        albumsAPI,
+        tracksAPI
+      );
     },
     deleteTrack: async (
       _: any,
       { id }: { id: string },
       {
-        dataSources: { artistsAPI, bandsAPI, genresAPI, tracksAPI },
+        dataSources: { artistsAPI, bandsAPI, genresAPI, tracksAPI, albumsAPI },
       }: {
         dataSources: {
           artistsAPI: ArtistsAPI;
           bandsAPI: BandsAPI;
           genresAPI: GenresAPI;
           tracksAPI: TracksAPI;
+          albumsAPI: AlbumsAPI;
         };
       }
     ) => {
@@ -91,18 +117,26 @@ const tracksResolvers = {
       _: any,
       { id, body }: { id: string; body: TrackUpdateInput },
       {
-        dataSources: { artistsAPI, bandsAPI, genresAPI, tracksAPI },
+        dataSources: { artistsAPI, bandsAPI, genresAPI, tracksAPI, albumsAPI },
       }: {
         dataSources: {
           artistsAPI: ArtistsAPI;
           bandsAPI: BandsAPI;
           genresAPI: GenresAPI;
           tracksAPI: TracksAPI;
+          albumsAPI: AlbumsAPI;
         };
       }
     ) => {
       const response = await tracksAPI.updateTrack(id, body);
-      return await trackToOutput(response, artistsAPI, bandsAPI, genresAPI);
+      return await trackToOutput(
+        response,
+        artistsAPI,
+        bandsAPI,
+        genresAPI,
+        albumsAPI,
+        tracksAPI
+      );
     },
   },
 };

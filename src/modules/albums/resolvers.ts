@@ -6,6 +6,7 @@ import { TracksAPI } from "../tracks/service";
 import { Album, AlbumInput, AlbumOutput, AlbumUpdateInput } from "./types";
 import { albumToOutput } from "./albumObjectMutation";
 import { AlbumsAPI } from "./service";
+import { Track } from "../tracks/types";
 
 const albumsResolvers = {
   Query: {
@@ -32,7 +33,8 @@ const albumsResolvers = {
             artistsAPI,
             bandsAPI,
             tracksAPI,
-            genresAPI
+            genresAPI,
+            albumsAPI
           );
         })
       );
@@ -63,7 +65,8 @@ const albumsResolvers = {
         artistsAPI,
         bandsAPI,
         tracksAPI,
-        genresAPI
+        genresAPI,
+        albumsAPI
       );
     },
   },
@@ -84,12 +87,28 @@ const albumsResolvers = {
       }
     ) => {
       const response: Album = await albumsAPI.createAlbum(input);
+
+      if (response.trackIds) {
+        const tracks = await Promise.all(
+          response.trackIds.map(async (trackId) => {
+            return await tracksAPI.getTrackById(trackId);
+          })
+        );
+
+        tracks.forEach(async (track: Track) => {
+          if (!track.albumId) {
+            await tracksAPI.updateTrack(track._id, { albumId: response._id });
+          }
+        });
+      }
+
       return await albumToOutput(
         response,
         artistsAPI,
         bandsAPI,
         tracksAPI,
-        genresAPI
+        genresAPI,
+        albumsAPI
       );
     },
     deleteAlbum: async (
@@ -110,7 +129,7 @@ const albumsResolvers = {
       const response = await albumsAPI.deleteAlbum(id);
       return response.acknowledged;
     },
-    updateTrack: async (
+    updateAlbum: async (
       _: any,
       { id, body }: { id: string; body: AlbumUpdateInput },
       {
@@ -131,7 +150,8 @@ const albumsResolvers = {
         artistsAPI,
         bandsAPI,
         tracksAPI,
-        genresAPI
+        genresAPI,
+        albumsAPI
       );
     },
   },

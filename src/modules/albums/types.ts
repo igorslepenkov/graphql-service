@@ -1,7 +1,7 @@
 import { ArtistOutput } from "../artists/types";
 import { BandOutput } from "../bands/types";
 import { Genre, GenreOutput } from "../genres/types";
-import { TrackOutput } from "../tracks/types";
+import { TrackAlbumOutput, TrackOutput } from "../tracks/types";
 
 interface Album {
   _id: string;
@@ -20,7 +20,7 @@ interface AlbumOutput {
   released?: number;
   artists?: ArtistOutput[];
   bands?: BandOutput[];
-  tracks?: TrackOutput[];
+  tracks?: TrackAlbumOutput[];
   genres?: GenreOutput[];
   image?: string;
 }

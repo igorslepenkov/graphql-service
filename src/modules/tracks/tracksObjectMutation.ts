@@ -1,16 +1,21 @@
+import { albumToOutput } from "../albums/albumObjectMutation";
+import { AlbumsAPI } from "../albums/service";
 import { artistToOutput } from "../artists/artistsObjectMutation";
 import { ArtistsAPI } from "../artists/service";
 import { bandsToOutput } from "../bands/bandsObjectMutation";
 import { BandsAPI } from "../bands/service";
 import { genresToOutput } from "../genres/genresObjectMutation";
 import { GenresAPI } from "../genres/service";
+import { TracksAPI } from "./service";
 import { Track, TrackOutput } from "./types";
 
 async function trackToOutput(
   trackObject: Track,
   artistAPI: ArtistsAPI,
   bandsAPI: BandsAPI,
-  genresAPI: GenresAPI
+  genresAPI: GenresAPI,
+  albumsAPI: AlbumsAPI,
+  tracksAPI: TracksAPI
 ): Promise<TrackOutput> {
   const {
     _id,
@@ -28,7 +33,17 @@ async function trackToOutput(
     title,
   };
 
-  albumId ? (newObject.album = albumId) : false;
+  if (albumId) {
+    const album = await albumsAPI.getAlbumById(albumId);
+    newObject.album = await albumToOutput(
+      album,
+      artistAPI,
+      bandsAPI,
+      tracksAPI,
+      genresAPI,
+      albumsAPI
+    );
+  }
 
   if (artistsIds) {
     const artists = Promise.all(

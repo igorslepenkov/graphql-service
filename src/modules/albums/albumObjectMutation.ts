@@ -9,15 +9,82 @@ import { GenresAPI } from "../genres/service";
 import { Genre } from "../genres/types";
 import { TracksAPI } from "../tracks/service";
 import { trackToOutput } from "../tracks/tracksObjectMutation";
-import { Track } from "../tracks/types";
+import { Track, TrackAlbumOutput } from "../tracks/types";
+import { AlbumsAPI } from "./service";
 import { Album, AlbumOutput } from "./types";
+
+async function trackToAlbumOutput(
+  trackObject: Track,
+  artistAPI: ArtistsAPI,
+  bandsAPI: BandsAPI,
+  genresAPI: GenresAPI,
+  tracksAPI: TracksAPI,
+  albumsAPI: AlbumsAPI
+) {
+  const {
+    _id,
+    title,
+    albumId,
+    artistsIds,
+    bandsIds,
+    duration,
+    released,
+    genresIds,
+  } = trackObject;
+
+  const newObject: TrackAlbumOutput = {
+    id: _id,
+    title,
+  };
+
+  if (albumId) {
+    const album = await albumsAPI.getAlbumById(albumId);
+    newObject.album = album.name;
+  }
+
+  if (artistsIds) {
+    const artists = Promise.all(
+      artistsIds.map(async (artistId) => {
+        const artist = await artistAPI.getArtistById(artistId);
+        return await artistToOutput(artist, bandsAPI, genresAPI, artistAPI);
+      })
+    );
+    newObject.artists = await artists;
+  }
+
+  if (bandsIds) {
+    const bands = Promise.all(
+      bandsIds.map(async (bandId) => {
+        const band = await bandsAPI.getBandById(bandId);
+        return await bandsToOutput(band, genresAPI, artistAPI, bandsAPI);
+      })
+    );
+    newObject.bands = await bands;
+  }
+
+  duration ? (newObject.duration = duration) : false;
+  released ? (newObject.released = released) : false;
+
+  if (genresIds) {
+    const genres = Promise.all(
+      genresIds.map(async (genreId) => {
+        const genre = await genresAPI.getGenreById(genreId);
+        return genresToOutput(genre);
+      })
+    );
+    newObject.genres = await genres;
+  }
+
+  return newObject;
+}
 
 async function albumToOutput(
   albumObject: Album,
   artistsAPI: ArtistsAPI,
   bandsAPI: BandsAPI,
   tracksAPI: TracksAPI,
-  genresAPI: GenresAPI
+  genresAPI: GenresAPI,
+  albumsAPI: AlbumsAPI
 ) {
   const {
     _id,
@@ -61,7 +128,14 @@ async function albumToOutput(
     const tracks = Promise.all(
       trackIds.map(async (trackId) => {
         const track: Track = await tracksAPI.getTrackById(trackId);
-        return await trackToOutput(track, artistsAPI, bandsAPI, genresAPI);
+        return await trackToAlbumOutput(
+          track,
+          artistsAPI,
+          bandsAPI,
+          genresAPI,
+          tracksAPI,
+          albumsAPI
+        );
       })
     );
     newObject.tracks = await tracks;

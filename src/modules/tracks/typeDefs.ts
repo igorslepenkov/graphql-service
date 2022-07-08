@@ -4,6 +4,17 @@ const tracksTypeDefs = gql`
   type Track {
     id: ID!
     title: String!
+    album: Album
+    artists: [Artist]
+    bands: [Band]
+    duration: Int
+    released: Int
+    genres: [Genre]
+  }
+
+  type TrackAlbumOutput {
+    id: ID!
+    title: String!
     album: String
     artists: [Artist]
     bands: [Band]

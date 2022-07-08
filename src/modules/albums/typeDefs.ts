@@ -7,7 +7,7 @@ const albumsTypeDefs = gql`
     released: Int
     artists: [Artist]
     bands: [Band]
-    tracks: [Track]
+    tracks: [TrackAlbumOutput]
     genres: [Genre]
     image: String
   }
