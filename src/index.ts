@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-import { ApolloServer } from "apollo-server";
+import { ApolloServer, gql } from "apollo-server";
 import { mergeTypeDefs, mergeResolvers } from "@graphql-tools/merge";
 import "dotenv/config";
 
@@ -71,15 +71,31 @@ const server = new ApolloServer({
     };
   },
   context: ({ req }) => {
-    const jwt = fs.readFileSync(
-      path.join(__dirname, "./modules/jwt/token.json")
-    );
-    const token = JSON.parse(jwt.toString()).jwt;
-    const authToken = req.headers.authorization || token || "";
+    let token;
+    try {
+      const data = fs.readFileSync(
+        path.join(__dirname, "./modules/jwt/token.json")
+      );
+      token = data.toString();
+    } catch (err) {}
+    let authToken;
+    if (token) {
+      authToken = JSON.parse(token).jwt;
+    } else {
+      authToken = req.headers.authorization;
+    }
     return { authToken };
   },
 });
 
 server.listen(process.env.APOLLO_PORT).then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
+});
+
+process.on("SIGINT", () => {
+  try {
+    fs.rmSync(path.join(__dirname, "./modules/jwt/token.json"));
+  } catch (err) {}
+  console.log("Thank you for using graphQL service!");
+  process.exit();
 });

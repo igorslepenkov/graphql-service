@@ -33,12 +33,19 @@ const usersResolvers = {
     },
   },
   Mutation: {
-    createUser: async (
+    register: async (
       _: any,
       { data }: { data: UserInput },
       { dataSources: { usersAPI } }: { dataSources: { usersAPI: UsersAPI } }
     ) => {
       const response = await usersAPI.createNewUser(data);
+      const userObject = {
+        id: response._id,
+        firstName: response.firstName,
+        lastName: response.lastName,
+        password: response.password,
+        email: response.email,
+      };
       return response;
     },
   },

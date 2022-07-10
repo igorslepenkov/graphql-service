@@ -4,7 +4,7 @@
   "description": "graphql shell for misicify service (rsschool task graphql)",
   "main": "./src/index.ts",
   "scripts": {
-    "dev": "nodemon ./src/index.ts",
+    "dev": "kill-port --port 8000 && nodemon ./src/index.ts",
     "prod": "kill-port --port 8000 && tsc && node ./dist/src/index.js"
   },
   "repository": {

@@ -4,7 +4,7 @@ const usersTypeDefs = gql`
   type User {
     id: ID!
     firstName: String
-    secondName: String
+    lastName: String
     password: String
     email: String
   }
@@ -21,7 +21,7 @@ const usersTypeDefs = gql`
   }
 
   type Mutation {
-    createUser(data: UserInput!): User
+    register(data: UserInput!): User
   }
 `;
 
