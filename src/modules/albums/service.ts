@@ -11,8 +11,8 @@ class AlbumsAPI extends RESTDataSource {
     request.headers.set("Authorization", `Bearer ${this.context.authToken}`);
   }
 
-  async getAlbums() {
-    const albums = await this.get(`/v1/albums`);
+  async getAlbums(params: { limit: number; offset: number }) {
+    const albums = await this.get(`/v1/albums`, params);
     return albums.items;
   }
 

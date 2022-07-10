@@ -13,6 +13,17 @@ const artistsTypeDefs = gql`
     instruments: [String]
   }
 
+  type ArtistMemberOutput {
+    id: ID!
+    firstName: String
+    secondName: String
+    middleName: String
+    birthDate: String
+    birthPlace: String
+    country: String
+    instruments: [String]
+  }
+
   input AtristInput {
     firstName: String!
     secondName: String!
@@ -20,7 +31,7 @@ const artistsTypeDefs = gql`
     birthDate: String
     birthPlace: String
     country: String!
-    bands: [ID]
+    bandsIds: [ID]
     instruments: [String]
   }
 
@@ -36,7 +47,7 @@ const artistsTypeDefs = gql`
   }
 
   type Query {
-    artists: [Artist]
+    artists(limit: Int, offset: Int): [Artist]
     artist(id: ID!): Artist
   }
 

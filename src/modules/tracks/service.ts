@@ -1,5 +1,6 @@
 import { RESTDataSource, RequestOptions } from "apollo-datasource-rest";
 import { TrackInput, TrackUpdateInput } from "./types";
+import { ApolloErrorNotFound } from "../../utils/apolloErrorNoFound";
 
 class TracksAPI extends RESTDataSource {
   constructor() {
@@ -11,13 +12,16 @@ class TracksAPI extends RESTDataSource {
     request.headers.set("Authorization", `Bearer ${this.context.authToken}`);
   }
 
-  async getTracks() {
-    const tracks = await this.get(`/v1/tracks`);
+  async getTracks(params: { limit: number; offset: number }) {
+    const tracks = await this.get(`/v1/tracks`, params);
     return tracks.items;
   }
 
   async getTrackById(id: string) {
     const track = await this.get(`/v1/tracks/${id}`);
+    if (!track) {
+      throw new ApolloErrorNotFound("Track was not found");
+    }
     return track;
   }
 

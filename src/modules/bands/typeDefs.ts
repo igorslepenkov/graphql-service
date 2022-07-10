@@ -2,7 +2,7 @@ import { gql } from "apollo-server";
 
 const bandsTypeDefs = gql`
   type Member {
-    artist: Artist
+    artist: ArtistMemberOutput
     instrument: String
     years: String
   }
@@ -39,7 +39,7 @@ const bandsTypeDefs = gql`
   }
 
   type Query {
-    bands: [Band]
+    bands(limit: Int, offset: Int): [Band]
     band(id: ID!): Band
   }
 

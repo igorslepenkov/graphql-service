@@ -24,7 +24,7 @@ const genresTypeDefs = gql`
   }
 
   type Query {
-    genres: [Genre]
+    genres(limit: Int, offset: Int): [Genre]
     genre(id: ID!): Genre
   }
 

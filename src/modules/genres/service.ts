@@ -13,8 +13,8 @@ class GenresAPI extends RESTDataSource {
     }
   }
 
-  async getGenres() {
-    const genres = await this.get("/v1/genres");
+  async getGenres(params: { limit: number; offset: number }) {
+    const genres = await this.get("/v1/genres", params);
     return genres.items;
   }
 

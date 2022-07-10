@@ -11,8 +11,8 @@ class BandsAPI extends RESTDataSource {
     request.headers.set("Authorization", `Bearer ${this.context.authToken}`);
   }
 
-  async getBands() {
-    const bands = await this.get("/v1/bands");
+  async getBands(params: { limit: number; offset: number }) {
+    const bands = await this.get("/v1/bands", params);
     return bands.items;
   }
 

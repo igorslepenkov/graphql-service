@@ -12,7 +12,7 @@ const albumsResolvers = {
   Query: {
     albums: async (
       _: undefined,
-      __: undefined,
+      { limit, offset }: { limit: number; offset: number },
       {
         dataSources: { artistsAPI, bandsAPI, genresAPI, tracksAPI, albumsAPI },
       }: {
@@ -25,7 +25,11 @@ const albumsResolvers = {
         };
       }
     ) => {
-      const response = await albumsAPI.getAlbums();
+      const params = {
+        limit,
+        offset,
+      };
+      const response = await albumsAPI.getAlbums(params);
       const albumsArray = await Promise.all(
         response.map(async (album: Album) => {
           return await albumToOutput(

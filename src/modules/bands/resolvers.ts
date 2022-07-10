@@ -11,7 +11,7 @@ const bandsResolvers = {
   Query: {
     bands: async (
       _: undefined,
-      __: undefined,
+      { limit, offset }: { limit: number; offset: number },
       {
         dataSources: { bandsAPI, genresAPI, artistsAPI },
       }: {
@@ -22,7 +22,11 @@ const bandsResolvers = {
         };
       }
     ) => {
-      const response = await bandsAPI.getBands();
+      const params = {
+        limit,
+        offset,
+      };
+      const response = await bandsAPI.getBands(params);
       const bandsArray = response.map(
         async (band: Band) =>
           await bandsToOutput(band, genresAPI, artistsAPI, bandsAPI)

@@ -11,7 +11,7 @@ const tracksResolvers = {
   Query: {
     tracks: async (
       _: undefined,
-      __: undefined,
+      { limit, offset }: { limit: number; offset: number },
       {
         dataSources: { artistsAPI, bandsAPI, genresAPI, tracksAPI, albumsAPI },
       }: {
@@ -24,7 +24,11 @@ const tracksResolvers = {
         };
       }
     ) => {
-      const response = await tracksAPI.getTracks();
+      const params = {
+        limit,
+        offset,
+      };
+      const response = await tracksAPI.getTracks(params);
       const tracksArray = await Promise.all(
         response.map(async (track: Track) => {
           return await trackToOutput(

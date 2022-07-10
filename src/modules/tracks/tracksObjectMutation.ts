@@ -77,7 +77,6 @@ async function trackToOutput(
     );
     newObject.genres = await genres;
   }
-
   return newObject;
 }
 

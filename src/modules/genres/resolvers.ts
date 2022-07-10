@@ -7,10 +7,14 @@ const genresResolvers = {
   Query: {
     genres: async (
       _: undefined,
-      __: undefined,
+      { limit, offset }: { limit: number; offset: number },
       { dataSources: { genresAPI } }: { dataSources: { genresAPI: GenresAPI } }
     ) => {
-      const response = await genresAPI.getGenres();
+      const params = {
+        limit,
+        offset,
+      };
+      const response = await genresAPI.getGenres(params);
       const genresArray = response.map(genresToOutput);
       return genresArray;
     },

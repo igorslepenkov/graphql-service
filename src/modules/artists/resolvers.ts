@@ -9,7 +9,7 @@ const artistsResolvers = {
   Query: {
     artists: async (
       _: undefined,
-      __: undefined,
+      { limit, offset }: { limit: number; offset: number },
       {
         dataSources: { artistsAPI, bandsAPI, genresAPI },
       }: {
@@ -20,7 +20,11 @@ const artistsResolvers = {
         };
       }
     ) => {
-      const response = await artistsAPI.getArtists();
+      const params = {
+        limit,
+        offset,
+      };
+      const response = await artistsAPI.getArtists(params);
       const artistsArray = response.map(async (artist: Artist) => {
         return await artistToOutput(artist, bandsAPI, genresAPI, artistsAPI);
       });

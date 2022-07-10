@@ -11,8 +11,8 @@ class ArtistsAPI extends RESTDataSource {
     request.headers.set("Authorization", `Bearer ${this.context.authToken}`);
   }
 
-  async getArtists() {
-    const artists = await this.get(`/v1/artists`);
+  async getArtists(params: { limit: number; offset: number }) {
+    const artists = await this.get(`/v1/artists`, params);
     return artists.items;
   }
 
