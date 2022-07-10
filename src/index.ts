@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-import { ApolloServer, gql } from "apollo-server";
+import { ApolloServer } from "apollo-server";
 import { mergeTypeDefs, mergeResolvers } from "@graphql-tools/merge";
 import "dotenv/config";
 
