@@ -9,7 +9,7 @@
 
 ### 1) Installing
 
-    After cloning the repository use **npm install** command
+    After cloning the repository use **git checkout develop** and **npm install** command to switch to develop branch and install dependencies.
 
 ### 2) Runnning
 
