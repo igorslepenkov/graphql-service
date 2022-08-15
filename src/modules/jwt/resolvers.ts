@@ -12,7 +12,6 @@ const jwtResolvers = {
       { dataSources: { usersAPI } }: { dataSources: { usersAPI: UsersAPI } }
     ) => {
       const response = await usersAPI.logInUser(data);
-      console.log(response);
       await fs.writeFile(
         path.join(__dirname, "token.json"),
         JSON.stringify(response)
